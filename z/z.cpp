@@ -32,20 +32,17 @@ void print (char *a, int k)
 			cout<<setw(4)<<a[i];
 	cout<<endl<<endl;
 }
-void ReadMas(char *mas,int k)
+bool ReadMas(char *mas,int k)
 {
 	ifstream f("mas.txt");
 	int i=0;
 	if (f)
-	{
 		while (!f.eof())
 		{
 			f>>mas[i++];
 			if (i==k) break;
 		}
-		print (mas,k);
-	}
-	else cout<<"error";
+	return f;
 }
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -56,29 +53,33 @@ int _tmain(int argc, _TCHAR* argv[])
 	bool A_Z,a_z;
 	int n_A=0, n_a=0;
 	mas=new char[n];
-	ReadMas(mas,n);
-	for (int i=0;i<n;i++)
+	if (ReadMas(mas,n))
 	{
-		A_Z=(mas[i]>='A') && (mas[i]<='Z');
-		a_z=(mas[i]>='a') && (mas[i]<='z');
-		if (A_Z||a_z) 
+		print (mas,n);
+		for (int i=0;i<n;i++)
 		{
-			SetColor(Red, Black);
-			cout<<setw(4)<<mas[i];
-			if (A_Z)
-				n_A++;
-			if (a_z)
-				n_a++;
+			A_Z=(mas[i]>='A') && (mas[i]<='Z');
+			a_z=(mas[i]>='a') && (mas[i]<='z');
+			if (A_Z||a_z) 
+			{
+				SetColor(Red, Black);
+				cout<<setw(4)<<mas[i];
+				if (A_Z)
+					n_A++;
+				if (a_z)
+					n_a++;
+			}
+			else
+			{
+				SetColor(LightGray, Black);
+				cout<<setw(4)<<mas[i];
+			}
 		}
-		else
-		{
-			SetColor(LightGray, Black);
-			cout<<setw(4)<<mas[i];
-		}
+		SetColor(LightGray, Black);
+		cout<<endl<<"Заглавных букв: "<<n_A
+			<<endl<<"Строчных букв: "<<n_a;
 	}
-	SetColor(LightGray, Black);
-	cout<<endl<<"Заглавных букв: "<<n_A
-		<<endl<<"Строчных букв: "<<n_a;
+	else cout<<"error";
 	getch();
 	return 0;
 }
